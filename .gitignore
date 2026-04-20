@@ -1,0 +1,4 @@
+blob-frontend/.env
+blob-frontend/.env.*
+
+blob-backend/appsettings.Development.json

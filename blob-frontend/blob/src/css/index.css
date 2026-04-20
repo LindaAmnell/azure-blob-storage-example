@@ -1,0 +1,13 @@
+/* Remove default browser spacing */
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* Ensure full dark background */
+body {
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+}
