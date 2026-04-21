@@ -1,6 +1,6 @@
-# Azure Blob Storage Example
+# 📦 Azure Blob Storage Fullstack Example
 
-This project demonstrates how to build a simple fullstack application using an ASP.NET Core backend connected to Azure Blob Storage via Azure Key Vault, with a React (TypeScript) frontend.
+This project demonstrates a simple fullstack application using an ASP.NET Core backend connected to Azure Blob Storage via Azure Key Vault, with a React (TypeScript) frontend.
 
 ---
 
@@ -19,18 +19,46 @@ This project demonstrates how to build a simple fullstack application using an A
 
 ---
 
-## 📌 What this project does
+## 📌 Features
 
-* Retrieves files from Azure Blob Storage
-* Displays them in a frontend UI
-* Allows users to open/download files
-* Stores sensitive data securely using Azure Key Vault
+* Retrieve files from Azure Blob Storage
+* Display files in a frontend UI
+* Open or download files
+* Securely store secrets using Azure Key Vault
+
+---
+
+## ⚠️ Prerequisites (Important)
+
+Before running this project, you must **already have the following Azure resources created and configured**:
+
+* An Azure Storage Account (Blob Storage enabled)
+* A Blob container (e.g. `handbooks`) with uploaded files
+* An Azure Key Vault
+* A secret in Key Vault containing your **Blob Storage connection string**
+
+Example:
+
+* **Secret Name:** `blobstoragekey`
+* **Secret Value:** `<your Azure Blob Storage connection string>`
+
+> ⚠️ The application will not work without these resources being set up beforehand.
+
+---
+
+## 🔗 How It Works
+
+1. The backend authenticates using Azure CLI (`az login`)
+2. It retrieves the connection string from Azure Key Vault
+3. It connects to Azure Blob Storage
+4. It fetches files from the specified container
+5. The frontend displays the files
 
 ---
 
 ## 🧱 Project Structure
 
-```bash id="r1zjkb"
+```bash
 blob-backend/   # ASP.NET Core API
 blob-frontend/  # React frontend
 ```
@@ -39,64 +67,30 @@ blob-frontend/  # React frontend
 
 ## ⚙️ Setup
 
-### 1. Install dependencies
+### 1. Install Dependencies
 
 #### Backend
 
-Install required NuGet packages:
-
-```bash id="xazdpo"
+```bash
 dotnet add package Azure.Storage.Blobs
 dotnet add package Azure.Identity
 dotnet add package Azure.Extensions.AspNetCore.Configuration.Secrets
 ```
 
----
-
 #### Frontend
 
-```bash id="fgb4y0"
+```bash
 cd blob-frontend
 npm install
 ```
 
 ---
 
-### 2. Azure requirements
-
-Make sure you have the following:
-
-* An Azure Storage Account (Blob Storage)
-* A Blob container (e.g. `handbooks`)
-* An Azure Key Vault
-
----
-
-### 3. Add a secret to Key Vault
-
-Create a secret in your Key Vault:
-
-Name:
-
-```id="v2d8n3"
-your-secret-name
-```
-
-Value:
-
-```id="d0n9x4"
-<your Azure Blob Storage connection string>
-```
-
-Make sure this is the **Blob Storage connection string**.
-
----
-
-### 4. Configure backend
+### 2. Configure Azure Key Vault
 
 Update `appsettings.Development.json`:
 
-```json id="a0b9xz"
+```json
 {
   "KeyVaultKey": {
     "KeyVaultURL": "https://your-keyvault-name.vault.azure.net/"
@@ -106,52 +100,44 @@ Update `appsettings.Development.json`:
 
 ---
 
-### 5. Update secret name in code
+### 3. Configure Secret Name in Code
 
 In `Program.cs`, replace:
 
-```csharp id="q1z7wr"
+```csharp
 builder.Configuration["your-secret-name"];
 ```
 
-with the name of your Key Vault secret that contains your Blob Storage connection string.
+with your actual Key Vault secret name:
 
-Example:
-
-```csharp id="z6l8qp"
+```csharp
 builder.Configuration["blobstoragekey"];
 ```
 
 ---
 
-### 6. Run backend
+### 4. Run Backend
 
-```bash id="mv8o3c"
+```bash
 cd blob-backend
 dotnet run
 ```
 
 ---
 
-### 7. Configure frontend
+### 5. Configure Frontend
 
 Create a `.env` file in `blob-frontend`:
 
-```env id="k8m4zx"
-VITE_API_URL=your-backend-api-url
-```
-
-Example:
-
-```id="f4n2qp"
-http://localhost:5063/api/handbooks
+```env
+VITE_API_URL=http://localhost:5063/api/handbooks
 ```
 
 ---
 
-### 8. Run frontend
+### 6. Run Frontend
 
-```bash id="y8p3zk"
+```bash
 npm run dev
 ```
 
@@ -159,7 +145,7 @@ npm run dev
 
 ## 📡 API Endpoints
 
-```id="r7x1lm"
+```
 GET /api/handbooks
 GET /api/handbooks/{fileName}
 ```
@@ -168,18 +154,31 @@ GET /api/handbooks/{fileName}
 
 ## 🔐 Authentication
 
-To run the backend locally, sign in using Azure CLI:
+To run the backend locally, authenticate with Azure:
 
-```bash id="l8q2xp"
+```bash
 az login
 ```
 
-This allows the application to access Azure Key Vault using your credentials.
+This allows the app to access Azure Key Vault using your credentials.
 
 ---
 
-## 🔐 Notes
+## 🔐 Security Notes
 
-* Secrets are stored in Azure Key Vault
-* No connection strings are stored in the code
-* `.env` and development files are excluded from version control
+* Secrets are stored securely in Azure Key Vault
+* No connection strings are stored in source code
+* `.env` and development settings should not be committed
+
+---
+
+## 💡 Notes
+
+This project is intended as a learning example of how to integrate:
+
+* Azure Blob Storage
+* Azure Key Vault
+* Secure configuration in ASP.NET Core
+* A simple React frontend
+
+---
